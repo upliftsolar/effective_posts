@@ -1,0 +1,18 @@
+---
+es:
+  effective_posts:
+    published_on_date: "Publicado por %{date}"
+    published_at_datetime: "Publicado por %{datetime}"
+    published_in_cat: "Publicado in %{cat}"
+    published_by_author: "Publicado por %{author}"
+    published_on_date_by_author: "Publicado por %{date} por %{author}"
+    published_on_date_in_cat_by_author: "Publicado por %{date} a  %{cat} por %{author}"
+    published_at_datetime_by_author: "Publicado por %{datetime} por %{author}"
+    published_at_datetime_in_cat_by_author: "Publicado por %{datetime} a  %{cat} por %{author}"
+    Unknown: "Desconocido"
+    continue_reading: "Leer más"
+  time:
+    formats:
+      date_month_year_concise: '%d-%m-%y'
+      human_date: '%B %d, %Y'
+      human_date_and_time: '%B %d, %Y at %l:%M %p'

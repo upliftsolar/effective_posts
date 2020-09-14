@@ -58,13 +58,20 @@ module EffectivePostsHelper
   end
 
   def post_meta(post, date: true, datetime: false, category: true, author: true)
-    [
-      'Published',
-      ("on #{post.published_at.strftime('%B %d, %Y')}" if date),
-      ("on #{post.published_at.strftime('%B %d, %Y at %l:%M %p')}" if datetime),
-      ("to #{link_to_post_category(post.category)}" if category && Array(EffectivePosts.categories).length > 1),
-      ("by #{post.user.to_s.presence || 'Unknown'}" if author && EffectivePosts.post_meta_author && post.user.present?)
-    ].compact.join(' ').html_safe
+    interpolations = {}
+    interpolations[:date] = l(post.published_at, format: :human_date) if date
+    interpolations[:datetime] = l(post.published_at, format: :human_date_and_time) if datetime
+    interpolations[:cat] = link_to_post_category(t(post.category)) if category && Array(EffectivePosts.categories).length > 1
+    interpolations[:author] = post.user.to_s.presence || t('effective_posts.Unknown') if author && EffectivePosts.post_meta_author && post.user.present?
+    o = t([
+      "effective_posts.published",
+      ("on_date" if interpolations[:date]),
+      ("on_datetime" if interpolations[:datetime]),
+      ("in_cat" if interpolations[:cat]),
+      ("by_author" if interpolations[:author])
+    ].compact.join('_'))
+    o = o % interpolations
+    o.html_safe
   end
 
   def admin_post_status_badge(post)
@@ -104,7 +111,7 @@ module EffectivePostsHelper
 
   def read_more_link(post, options = {})
     content_tag(:p, class: 'post-read-more') do
-      link_to((options.delete(:label) || 'Continue reading'), effective_post_path(post), (options.delete(:class) || {class: ''}).reverse_merge(options))
+      link_to((options.delete(:label) || t(:continue_reading)), effective_post_path(post), (options.delete(:class) || {class: ''}).reverse_merge(options))
     end
   end
   alias_method :readmore_link, :read_more_link
