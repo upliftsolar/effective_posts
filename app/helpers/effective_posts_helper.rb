@@ -59,11 +59,11 @@ module EffectivePostsHelper
 
   def post_meta(post, date: true, datetime: false, category: true, author: true)
     interpolations = {}
-    interpolations[:date] = l(post.published_at, format: :human_date) if date
-    interpolations[:datetime] = l(post.published_at, format: :human_date_and_time) if datetime
+    interpolations[:date] = I18n.l(post.published_at, format: :human_date) if date
+    interpolations[:datetime] = I18n.l(post.published_at, format: :human_date_and_time) if datetime
     interpolations[:cat] = link_to_post_category(t(post.category)) if category && Array(EffectivePosts.categories).length > 1
-    interpolations[:author] = post.user.to_s.presence || t('effective_posts.Unknown') if author && EffectivePosts.post_meta_author && post.user.present?
-    o = t([
+    interpolations[:author] = post.user.to_s.presence || I18n.t('effective_posts.Unknown') if author && EffectivePosts.post_meta_author && post.user.present?
+    o = ::I18n.t([
       "effective_posts.published",
       ("on_date" if interpolations[:date]),
       ("on_datetime" if interpolations[:datetime]),
