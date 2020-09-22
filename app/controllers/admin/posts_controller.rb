@@ -131,6 +131,11 @@ module Admin
 
     def post_params
       params.require(:effective_post).permit(EffectivePosts.permitted_params)
+      update_attachments if params["effective_post"] && params["effective_post"]["attachments"]
+      params
+    end
+    private def update_attachments
+      resource.attachments.attach(params["effective_post"]["attachments"])
     end
 
   end
