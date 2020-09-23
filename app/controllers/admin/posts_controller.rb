@@ -57,6 +57,8 @@ module Admin
 
       authorize_effective_posts!
 
+      update_attachments(@post) if params["effective_post"] && params["effective_post"]["attachments"]
+
       if @post.update_attributes(post_params)
         if params[:commit] == 'Save and Edit Content'
           redirect_to effective_regions.edit_path(effective_posts.post_path(@post), :exit => effective_posts.edit_admin_post_path(@post))
@@ -131,11 +133,9 @@ module Admin
 
     def post_params
       params.require(:effective_post).permit(EffectivePosts.permitted_params)
-      update_attachments if params["effective_post"] && params["effective_post"]["attachments"]
-      params
     end
-    private def update_attachments
-      resource.attachments.attach(params["effective_post"]["attachments"])
+    private def update_attachments(post)
+      post.attachments.attach(params["effective_post"]["attachments"])
     end
 
   end
